@@ -11,7 +11,7 @@ contributions:
   readers:
     - command: napari-imodmodel.get_reader
       accepts_directories: false
-      filename_patterns: ['*.npy']
+      filename_patterns: ['*.mod']
   sample_data:
     - command: napari-imodmodel.make_sample_data
       display_name: Napari Imod Model
