@@ -3,7 +3,7 @@ from pathlib import Path
 
 import numpy as np
 
-from imodmodel.models import ImodModel
+from imodmodel import ImodModel
 
 
 def napari_get_reader(path: Union[str, List[str]]) -> Optional[Callable]:
@@ -19,7 +19,7 @@ def read_model(path: Path) -> List[Tuple[np.ndarray, np.ndarray]]:
     meshes = list()
     for object in model.objects:
         for mesh in object.meshes:
-            meshes.append((mesh.vertices, mesh.reshaped_indices(), mesh.extra_values()))
+            meshes.append((mesh.vertices, mesh.indices, mesh.face_values))
     return meshes
 
 def reader_function(paths: Union[str, List[str]]) -> List[Tuple[Any, Dict, str]]:
