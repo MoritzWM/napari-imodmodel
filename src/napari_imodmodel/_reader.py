@@ -19,7 +19,10 @@ def read_model(path: Path) -> List[Tuple[np.ndarray, np.ndarray]]:
     meshes = list()
     for object in model.objects:
         for mesh in object.meshes:
-            meshes.append((mesh.vertices, mesh.indices, mesh.face_values))
+            if mesh.face_values is None:
+                meshes.append((mesh.vertices, mesh.indices))
+            else:
+                meshes.append((mesh.vertices, mesh.indices, mesh.face_values))
     return meshes
 
 def reader_function(paths: Union[str, List[str]]) -> List[Tuple[Any, Dict, str]]:
