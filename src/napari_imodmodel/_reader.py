@@ -36,11 +36,11 @@ def read_model(path: Path) -> "Iterable[LayerDataTuple]":
         for mesh in obj.meshes:
             vertex_colors = np.broadcast_to(color, (len(mesh.vertices), 3))
             if mesh.face_values is None:
-                yield (mesh.vertices, mesh.indices), dict(
+                yield (mesh.vertices[:, (2, 1, 0)], mesh.indices), dict(
                     vertex_colors=vertex_colors, shading="smooth"
                 ), "surface"
             else:
-                yield (mesh.vertices, mesh.indices, mesh.face_values), dict(
+                yield (mesh.vertices[:, (2, 1, 0)], mesh.indices, mesh.face_values), dict(
                     vertex_colors=vertex_colors, shading="smooth"
                 ), "surface"
 
