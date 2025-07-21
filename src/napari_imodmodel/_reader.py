@@ -20,9 +20,9 @@ if TYPE_CHECKING:
 
 
 def _obj_type(flags: int) -> str:
-    if flags & 1<<9: # bit 9
+    if flags.scattered:
         return "scattered"
-    elif flags & 1<<3: # bit 3
+    elif flags.open:
         return "open"
     return "closed"
 
