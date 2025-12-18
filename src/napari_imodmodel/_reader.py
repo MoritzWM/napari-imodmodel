@@ -13,13 +13,14 @@ from pathlib import Path
 import numpy as np
 
 from imodmodel import ImodModel
+from imodmodel.models import ObjectFlags
 
 if TYPE_CHECKING:
     from typing import Iterable
     from napari.types import LayerDataTuple
 
 
-def _obj_type(flags: int) -> str:
+def _obj_type(flags: ObjectFlags) -> str:
     if flags.scattered:
         return "scattered"
     elif flags.open:
@@ -39,7 +40,6 @@ def read_model(path: Path) -> "Iterable[LayerDataTuple]":
     model = ImodModel.from_file(path)
     for obj_num, obj in enumerate(model.objects, start=1):
         color = np.array([obj.header.red, obj.header.green, obj.header.blue])
-        obj_type = _obj_type(obj.header.flags)
         layer_data = [
             contour.points[:, (2, 1, 0)]
             for contour in obj.contours
@@ -48,12 +48,12 @@ def read_model(path: Path) -> "Iterable[LayerDataTuple]":
             "name": f"{path.stem} obj {obj_num}",
             "edge_color": "#" + ''.join([f'{int(c*255):0>2x}' for c in color]),
             }
-        if obj_type == "scattered":
+        if obj.header.flags.scattered:
             layer_type = "points"
             layer_data = np.concatenate(layer_data)
         else:
             layer_type = "shapes"
-            kwargs["shape_type"] = "path" if obj_type == "open" else "polygon"
+            kwargs["shape_type"] = "path" if obj.header.flags.open else "polygon"
         yield layer_data, kwargs, layer_type
 
         for mesh_num, mesh in enumerate(obj.meshes, start=1):
