@@ -43,6 +43,7 @@ def read_model(path: Path) -> "Iterable[LayerDataTuple]":
         layer_data = [
             contour.points[:, (2, 1, 0)]
             for contour in obj.contours
+            if len(contour.points) > 1
         ]
         kwargs = {
             "name": f"{path.stem} obj {obj_num}",
